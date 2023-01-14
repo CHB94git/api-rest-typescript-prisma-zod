@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  cars    Car[]    @relation(fields: [car_ids], references: [id])
+  car_ids String[] @db.ObjectId
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId  String   @db.ObjectId
+  v       Int      @default(0) @map("__v") @ignore
+
+  @@map("categories")
+}
+
+// model CarOnCategories {
+//   id         String    @id @default(auto()) @map("_id") @db.ObjectId
+//   category   Category? @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+//   car        Car?      @relation(fields: [carId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+//   carId      String?   @db.ObjectId
+//   categoryId String?   @db.ObjectId
+
+//   @@map("carsOnCategories")
+// }
+
+model Car {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  color       String
+  energy      Energy
+  description String     @default("This is a default description")
+  year        Int
+  price       Float
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String     @db.ObjectId
+  categories  Category[] @relation(fields: [categoryIds], references: [id])
+  categoryIds String[]   @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  v           Int        @default(0) @map("__v") @ignore
+
+  @@map("cars")
+}
+
+model User {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String     @unique
+  password    String
+  description String     @default("This is a default description")
+  role        Roles      @default(user)
+  status      Boolean    @default(true)
+  phone       Int?
+  address     Address?
+  cars        Car[]
+  categories  Category[]
+  storages    Storage[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  v           Int        @default(0) @map("__v") @ignore
+
+  @@map("users")
+}
+
+model Storage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileName  String
+  path      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  v         Int      @default(0) @map("__v") @ignore
+
+  @@map("storages")
+}
+
+// Address is an embedded document
+type Address {
+  street String
+  city   String
+  state  String
+  zip    String
+}
+
+enum Energy {
+  GASOLINE
+  ELECTRIC
+  GAS
+  SOLAR
+}
+
+enum Roles {
+  user
+  admin
+}
