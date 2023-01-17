@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createNewUser, deleteUserDB, findAllUsers, findOneUser, loginUser, softActiveUser, softDeleteUser, updateUserDB } from '../services/users.service';
+import { createNewUser, deleteUserDB, findAllUsers, findOneUser, getCarsUserById, getCategoriesUserById, loginUser, softActiveUser, softDeleteUser, updateUserDB } from '../services/users.service';
 import { handleHttpErrors } from '../utils/handle.errors';
 
 
@@ -12,10 +12,9 @@ const register = async ({ body }: Request, response: Response) => {
   }
 }
 
-const login = async (request: Request, response: Response) => {
-  const { email, password } = request.body
+const login = async ({ body }: Request, response: Response) => {
   try {
-    const responseUser = await loginUser({ email, password })
+    const responseUser = await loginUser(body)
 
     if (responseUser === 'Incorrect_credentials') {
       return response.status(403).json(responseUser)
@@ -89,15 +88,36 @@ const deleteUser = async (request: Request, response: Response) => {
   }
 }
 
+const getAllCategoriesByUser = async (request: Request, response: Response) => {
+  const { id } = request.params
+  try {
+    const categoriesByUser = await getCategoriesUserById(id)
+    return response.status(200).json({ categoriesByUser })
+  } catch (error: any) {
+    handleHttpErrors(response.status(500), 'ERROR_GET_ALL_CATEGORIES_BY_USER', error.message)
+  }
+}
+
+const getAllCarsByUser = async ({ params }: Request, response: Response) => {
+  try {
+    const carsByUser = await getCarsUserById(params.id)
+    return response.status(200).json({ carsByUser })
+  } catch (error: any) {
+    handleHttpErrors(response.status(500), 'ERROR_GET_ALL_CARS_BY_USER', error.message)
+  }
+}
+
 
 export {
-  register,
-  login,
-  getUserById,
-  getAllUsers,
-  updateUser,
-  disableuser,
   deleteUser,
+  disableuser,
   enableUser,
+  getAllCarsByUser,
+  getAllCategoriesByUser,
+  getAllUsers,
+  getUserById,
+  login,
+  register,
+  updateUser,
 };
 

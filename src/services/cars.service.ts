@@ -7,7 +7,7 @@ interface CarExt extends Car {
 }
 
 const insertCar = async (car: CarExt) => {
-  const { color, description, energy, name, price, year, userId, categoryId, categoryIds } = car
+  const { color, description, energy, name, price, year, userId, categoryId } = car
   const newCar = await prisma.car.create({
     data: {
       name,
@@ -16,7 +16,6 @@ const insertCar = async (car: CarExt) => {
       energy,
       price,
       year,
-      categoryIds,
       user: {
         connect: {
           id: userId
@@ -39,7 +38,9 @@ const insertCar = async (car: CarExt) => {
       user: {
         select: {
           id: true,
-          name: true
+          name: true,
+          email: true,
+          role: true
         }
       },
       categories: {
@@ -75,7 +76,8 @@ const getOneCar = async (id: string) => {
       user: {
         select: {
           name: true,
-          email: true
+          email: true,
+          role: true
         }
       }
     }
@@ -85,20 +87,33 @@ const getOneCar = async (id: string) => {
 }
 
 const getAllCars = async () => {
-  return await prisma.car.findMany(/* {
-    orderBy: {
-      createdAt: 'desc'
-    },
-    include: {
+  return await prisma.car.findMany({
+    select: {
+      id: true,
+      name: true,
+      color: true,
+      energy: true,
+      description: true,
+      year: true,
+      price: true,
+      createdAt: true,
+      updatedAt: true,
+      categories: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
       user: {
         select: {
           id: true,
           name: true,
-          email: true
+          email: true,
+          role: true
         }
       }
-    },
-  } */)
+    }
+  })
 }
 
 const updateCar = async (id: string, car: Car) => {

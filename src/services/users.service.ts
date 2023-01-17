@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import { prisma } from '../database/config';
-import { Auth } from '../interfaces/auth.interface';
 import { encryptPassword, verifyPassword } from '../utils/handle.hash';
 import { generateToken } from '../utils/handle.jwt';
+
 
 const createNewUser = async (user: User) => {
   const checkIsExists = await prisma.user.findUnique({ where: { email: user.email } })
@@ -27,7 +27,7 @@ const createNewUser = async (user: User) => {
   return registeredUser
 }
 
-const loginUser = async ({ email, password }: Auth) => {
+const loginUser = async ({ email, password }: User) => {
   const existsUser = await prisma.user.findUnique({
     where: { email },
     select: {
@@ -131,18 +131,38 @@ const softActiveUser = async (id: string) => {
   })
 }
 
-const deleteUserDB = async (id: string) => {
+const deleteUserDB = async (id: string): Promise<User> => {
   return await prisma.user.delete({ where: { id } })
+}
+
+const getCategoriesUserById = async (id: string) => {
+  return await prisma.user.findMany({
+    where: { id },
+    include: {
+      categories: true
+    }
+  })
+}
+
+const getCarsUserById = async (id: string) => {
+  return await prisma.user.findMany({
+    where: { id },
+    include: {
+      cars: true
+    }
+  })
 }
 
 export {
   createNewUser,
-  loginUser,
+  deleteUserDB,
   findAllUsers,
   findOneUser,
-  updateUserDB,
-  softDeleteUser,
-  deleteUserDB,
+  getCarsUserById,
+  getCategoriesUserById,
+  loginUser,
   softActiveUser,
+  softDeleteUser,
+  updateUserDB,
 };
 

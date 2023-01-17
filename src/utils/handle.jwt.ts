@@ -12,7 +12,7 @@ const generateToken = (uid: string): Promise<Error | null | string | undefined> 
   })
 }
 
-const verifyToken = async (jwtUser: string) => {
+const verifyToken = async (jwtUser: string): Promise<string | jwt.JwtPayload> => {
   const isValidToken = jwt.verify(jwtUser, process.env.JWT_SECRET!)
   return isValidToken
 }

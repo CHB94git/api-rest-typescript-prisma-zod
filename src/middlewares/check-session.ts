@@ -15,7 +15,7 @@ const tokenVerificationErrors: TokenErrors = {
 
 export const checkAuthStatus = async (request: RequestExt, response: Response, next: NextFunction) => {
   try {
-    if (!request.headers.authorization) throw new Error('jwt must be provided')
+    if (!request.headers.authorization) return response.status(400).send()
 
     const jwt = request.headers.authorization
     const token = jwt.split(' ').pop()!
