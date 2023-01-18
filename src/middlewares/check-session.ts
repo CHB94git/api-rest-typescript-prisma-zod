@@ -20,7 +20,7 @@ export const checkAuthStatus = async (request: RequestExt, response: Response, n
     const jwt = request.headers.authorization
     const token = jwt.split(' ').pop()!
 
-    const isAuth = await verifyToken(token) as { id: string }
+    const isAuth = await verifyToken(`${ token }`) as { uid: string }
     request.user = isAuth
     next()
   } catch (error: any) {

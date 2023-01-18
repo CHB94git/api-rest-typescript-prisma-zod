@@ -11,7 +11,7 @@ import {
   register,
   updateUser
 } from '../controllers/users.controller';
-import { validateLogin, validateRegister, validateUpdateUser } from '../validators/users.validators';
+import { validateLogin, validateRegister, validateUpdateUser, validateUpdateUserPartial } from '../validators/users.validators';
 
 
 const router = Router()
@@ -24,6 +24,7 @@ router.get('/', getAllUsers)
 router.route('/:id')
   .get(getUserById)
   .put(validateUpdateUser, updateUser)
+  .patch(validateUpdateUserPartial, updateUser)
   .delete(deleteUser)  // PERMANENT DELETE 
 
 router.get('/:id/cars', getAllCarsByUser)

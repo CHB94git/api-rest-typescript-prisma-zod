@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, ZodError } from 'zod';
 
+
 export const schemaValidatorMiddleware = (schema: AnyZodObject) => (request: Request, response: Response, next: NextFunction) => {
   try {
     schema.parse({
       body: request.body,
       query: request.query,
-      params: request.params,
+      params: request.params
     })
     return next()
   } catch (error: unknown) {
