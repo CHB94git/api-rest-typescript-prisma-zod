@@ -1,5 +1,5 @@
 import { Storage } from '@prisma/client';
-import { prisma } from '../client/prisma';
+import { prisma } from '../../prisma/client/prisma';
 
 
 export const registerUpload = async ({ fileName, path, userId }: Omit<Storage, 'id' | 'createdAt' | 'updatedAt'>) => {

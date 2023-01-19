@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { prisma } from '../database/config';
+import { prisma } from '../../prisma/client/prisma';
 import { encryptPassword, verifyPassword } from '../utils/handle.hash';
 import { generateToken } from '../utils/handle.jwt';
 

@@ -22,16 +22,6 @@ model Category {
   @@map("categories")
 }
 
-// model CarOnCategories {
-//   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-//   category   Category? @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-//   car        Car?      @relation(fields: [carId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-//   carId      String?   @db.ObjectId
-//   categoryId String?   @db.ObjectId
-
-//   @@map("carsOnCategories")
-// }
-
 model Car {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String

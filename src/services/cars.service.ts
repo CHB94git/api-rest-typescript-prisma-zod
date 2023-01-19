@@ -1,5 +1,5 @@
 import { Car } from '@prisma/client'
-import { prisma } from '../client/prisma'
+import { prisma } from '../../prisma/client/prisma'
 // import { prisma } from '../database/config'
 
 interface CarExt extends Car {

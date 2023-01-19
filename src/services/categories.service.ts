@@ -1,5 +1,5 @@
 import { Category } from '@prisma/client';
-import { prisma } from '../client/prisma';
+import { prisma } from '../../prisma/client/prisma';
 
 const createCategory = async ({ name, userId }: Category) => {
   return await prisma.category.create({
