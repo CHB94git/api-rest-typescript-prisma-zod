@@ -1,10 +1,10 @@
-import { Response } from 'express'
-import { RequestExt } from '../interfaces/req-extended'
+import { Request, Response } from 'express'
+// import { RequestExt } from '../interfaces/req-extended'
 import { getCarsAuth } from '../services/orders.service'
 import { handleHttpErrors } from '../utils/handle.errors'
 
 
-export const getCars = async (request: RequestExt, response: Response) => {
+export const getCars = async (request: Request, response: Response) => {
   try {
     const orders = await getCarsAuth()
     response.send({

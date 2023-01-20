@@ -1,5 +1,5 @@
-import { NextFunction, Response } from 'express';
-import { RequestExt } from '../interfaces/req-extended';
+import { NextFunction, Request, Response } from 'express';
+// import { RequestExt } from '../interfaces/req-extended';
 import { verifyToken } from '../utils/handle.jwt';
 
 interface TokenErrors {
@@ -13,9 +13,10 @@ const tokenVerificationErrors: TokenErrors = {
   ["jwt expired"]: "El jsonwebtoken ha expirado"
 }
 
-export const checkAuthStatus = async (request: RequestExt, response: Response, next: NextFunction) => {
+export const checkAuthStatus = async (request: Request, response: Response, next: NextFunction) => {
   try {
-    if (!request.headers.authorization) return response.status(400).send()
+    if (!request.headers.authorization)
+      return response.status(400).send()
 
     const jwt = request.headers.authorization
     const token = jwt.split(' ').pop()!
